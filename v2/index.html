@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="theme-color" content="#07090f"/>
+<meta name="description" content="90 Days of DevOps v3 — Get hired as a DevOps engineer"/>
+<title>90 Days of DevOps v3</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07090f;--s1:#0d1117;--s2:#141b26;--s3:#1c2436;--border:#222d42;
+  --text:#e6edf3;--sub:#7d8fa8;--muted:#4a5568;
+  --green:#00d9a0;--red:#ff5f5f;--amber:#ffc850;--blue:#4fa8ff;
+  --purple:#c084fc;--teal:#38bdf8;--orange:#f97316;
+  --mono:'JetBrains Mono',monospace;--body:'Outfit',sans-serif;
+  --r8:8px;--r12:12px;--r16:16px;--r20:20px;--nav-h:58px;
+}
+[data-theme="light"]{--bg:#f0f4f8;--s1:#fff;--s2:#f8fafc;--s3:#eef2f7;--border:#d1dbe8;--text:#1a202c;--sub:#5a6a7e;--muted:#94a3b8}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.6;min-height:100vh;padding-bottom:72px}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* NAV */
+#nav{position:sticky;top:0;z-index:100;height:var(--nav-h);background:rgba(7,9,15,.9);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;padding:0 16px}
+.nav-brand{font-family:var(--mono);font-weight:700;font-size:13px;white-space:nowrap;margin-right:4px;display:flex;align-items:center;gap:4px}
+.nav-brand .g{color:var(--green)}.nav-brand .p{color:var(--blue)}.nav-brand .v{color:var(--amber);font-size:10px;background:rgba(255,200,80,.12);padding:1px 5px;border-radius:3px;border:1px solid rgba(255,200,80,.25)}
+.nav-tabs{display:flex;gap:1px;flex:1;overflow-x:auto;scrollbar-width:none}.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{background:none;border:none;cursor:pointer;color:var(--sub);font-family:var(--body);font-size:12px;font-weight:500;padding:5px 10px;border-radius:var(--r8);white-space:nowrap;transition:all .2s}
+.nav-tab:hover{color:var(--text);background:var(--s3)}.nav-tab.active{color:var(--text);background:var(--s2)}
+.nav-tab.new-badge::after{content:'new';font-size:8px;background:var(--green);color:#000;padding:1px 4px;border-radius:3px;margin-left:4px;font-weight:700;vertical-align:top;margin-top:1px;display:inline-block}
+.nav-right{display:flex;gap:5px;margin-left:auto;flex-shrink:0}
+.nav-btn{background:var(--s2);border:1px solid var(--border);cursor:pointer;color:var(--sub);font-family:var(--body);font-size:11px;padding:4px 10px;border-radius:var(--r8);white-space:nowrap;transition:all .2s}
+.nav-btn:hover{color:var(--text);border-color:var(--muted)}.nav-btn.hi{color:var(--green);border-color:rgba(0,217,160,.35);background:rgba(0,217,160,.05)}
+
+/* MOBILE */
+#bottom-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,9,15,.95);backdrop-filter:blur(18px);border-top:1px solid var(--border);padding:5px 0 max(5px,env(safe-area-inset-bottom));justify-content:space-around}
+.btab{background:none;border:none;cursor:pointer;color:var(--sub);display:flex;flex-direction:column;align-items:center;gap:1px;padding:3px 5px;border-radius:var(--r8);min-width:38px;transition:color .2s;font-size:9px}
+.btab.active,.btab:hover{color:var(--green)}.bico{font-size:16px;line-height:1}
+@media(min-width:768px){#bottom-bar{display:none!important}body{padding-bottom:0}}
+@media(max-width:767px){#nav .nav-tabs,.nav-right{display:none}#bottom-bar{display:flex}}
+
+/* VIEWS */
+.view{display:none}.view.active{display:block}
+.wrap{max-width:900px;margin:0 auto;padding:26px 14px}
+
+/* TYPE */
+.eyebrow{font-family:var(--mono);font-size:10px;color:var(--green);text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px}
+.page-title{font-size:clamp(21px,4vw,30px);font-weight:800;letter-spacing:-.02em;margin-bottom:5px}
+.page-sub{color:var(--sub);font-size:13px}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin:18px 0}
+@media(max-width:540px){.stats-row{grid-template-columns:repeat(3,1fr)}}
+.sc{background:var(--s1);border:1px solid var(--border);border-radius:var(--r12);padding:11px 7px;text-align:center}
+.sc-num{font-size:19px;font-weight:700;font-family:var(--mono);color:var(--green)}.sc-lbl{font-size:9px;color:var(--sub);margin-top:2px;font-family:var(--mono)}
+
+/* XP */
+.xp-bar-wrap{background:var(--s1);border:1px solid var(--border);border-radius:var(--r12);padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.xp-level-badge{font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 9px;border-radius:5px;white-space:nowrap;flex-shrink:0;border:1px solid}
+.xp-info{flex:1;min-width:0}.xp-label-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--sub);margin-bottom:4px}
+.xp-track{height:5px;background:var(--s3);border-radius:3px;overflow:hidden}.xp-fill{height:100%;border-radius:3px;transition:width .6s ease;background:linear-gradient(90deg,var(--green),var(--blue))}
+.xp-total{font-family:var(--mono);font-size:11px;font-weight:600;white-space:nowrap}
+
+/* WEEKLY GOAL MINI */
+.week-goal-mini{background:var(--s1);border:1px solid var(--border);border-radius:var(--r12);padding:12px 14px;margin-bottom:12px;cursor:pointer;transition:border-color .2s}
+.week-goal-mini:hover{border-color:var(--muted)}
+.wgm-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.wgm-label{font-family:var(--mono);font-size:10px;color:var(--sub)}
+.wgm-nums{font-family:var(--mono);font-size:13px;font-weight:700;margin-left:auto;color:var(--text)}
+.wgm-track{height:6px;background:var(--s3);border-radius:3px;overflow:hidden}
+.wgm-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--blue));transition:width .5s}
+
+/* PROG */
+.prog-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--sub);margin-bottom:5px}
+.prog-track{height:5px;background:var(--s3);border-radius:3px;overflow:hidden;margin-bottom:12px}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:3px;transition:width .6s ease}
+.banner{background:var(--s1);border:1px solid var(--border);border-radius:var(--r12);padding:10px 13px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--sub);margin-bottom:16px;flex-wrap:wrap}
+
+/* SMART NEXT */
+.smart-next-card{background:linear-gradient(135deg,rgba(0,217,160,.05),rgba(79,168,255,.05));border:1px solid rgba(0,217,160,.22);border-radius:var(--r12);padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s}
+.smart-next-card:hover{border-color:rgba(0,217,160,.45);transform:translateY(-1px)}
+
+/* SEARCH */
+.search-wrap{background:var(--s1);border:1px solid var(--border);border-radius:var(--r12);padding:8px 13px;display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.search-wrap input{background:none;border:none;outline:none;flex:1;font-family:var(--body);font-size:13px;color:var(--text)}
+.search-wrap input::placeholder{color:var(--muted)}
+.sf-wrap{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px}
+.sf-chip{background:var(--s2);border:1px solid var(--border);color:var(--sub);font-size:10px;font-family:var(--mono);padding:3px 8px;border-radius:20px;cursor:pointer;transition:all .2s}
+.sf-chip:hover,.sf-chip.active{background:var(--s3);color:var(--text);border-color:var(--muted)}
+.sf-chip.f-type-concept.active{color:#4fa8ff;border-color:#4fa8ff;background:rgba(79,168,255,.07)}
+.sf-chip.f-type-code.active{color:#00d9a0;border-color:#00d9a0;background:rgba(0,217,160,.07)}
+.sf-chip.f-type-quiz.active{color:#ffc850;border-color:#ffc850;background:rgba(255,200,80,.07)}
+.sf-chip.f-type-project.active{color:#c084fc;border-color:#c084fc;background:rgba(192,132,252,.07)}
+.filter-bar{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px}
+.fpill{background:var(--s2);border:1px solid var(--border);color:var(--sub);font-size:10px;font-family:var(--mono);padding:3px 9px;border-radius:20px;cursor:pointer;transition:all .2s}
+.fpill:hover{color:var(--text);border-color:var(--muted)}.fpill.active{color:var(--text);background:var(--s3);border-color:var(--muted)}
+
+/* PHASE CARDS */
+.phase-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r16);margin-bottom:9px;overflow:hidden;transition:border-color .2s}
+.phase-card:hover{border-color:var(--muted)}
+.phase-hdr{display:flex;align-items:center;gap:11px;padding:13px 15px;cursor:pointer;user-select:none}
+.phase-icon{width:32px;height:32px;border-radius:8px;background:var(--pcd);border:1px solid var(--pc);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.phase-title{font-weight:700;font-size:13.5px}.phase-meta{font-family:var(--mono);font-size:9px;color:var(--sub);margin-top:2px}
+.mini-bar{height:3px;background:var(--s3);border-radius:2px;margin-top:4px}.mini-fill{height:100%;border-radius:2px;transition:width .4s}
+.done-pill{font-family:var(--mono);font-size:9px;color:var(--green);border:1px solid var(--green);padding:2px 7px;border-radius:7px;flex-shrink:0}
+.phase-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}.phase-body.open{grid-template-rows:1fr}
+.phase-body-inner{overflow:hidden}.phase-inner{padding:0 15px 13px}
+.day-block{border-top:1px solid var(--border);padding-top:9px;margin-top:9px}
+.day-block:first-child{border-top:none;margin-top:0}.day-block.all-done .day-hdr{opacity:.6}
+.day-hdr{display:flex;align-items:center;gap:7px;cursor:pointer;padding:2px 0;user-select:none}
+.day-tag{font-family:var(--mono);font-size:9px;color:var(--green);background:rgba(0,217,160,.07);padding:2px 6px;border-radius:3px;flex-shrink:0}
+.day-label{font-size:13px;font-weight:600;flex:1;min-width:0}
+.day-count{font-family:var(--mono);font-size:9px;color:var(--sub);flex-shrink:0}
+.day-chev{width:12px;height:12px;flex-shrink:0;color:var(--sub);transition:transform .25s}.day-chev.open{transform:rotate(180deg)}
+.day-tasks{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}.day-tasks.open{grid-template-rows:1fr}
+.day-tasks-inner{overflow:hidden}.day-tasks.open .day-tasks-inner{padding-top:7px}
+.task-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid var(--s3)}.task-row:last-of-type{border-bottom:none}
+.task-check{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:2px;transition:all .2s;background:var(--bg)}
+.task-check.done{background:var(--green);border-color:var(--green)}.task-check.done::after{content:'✓';font-size:9px;color:#000;font-weight:700}
+.task-text{font-size:12.5px;line-height:1.55;flex:1}.task-text.done{text-decoration:line-through;color:var(--sub)}
+.task-badge{font-family:var(--mono);font-size:8px;padding:2px 5px;border-radius:3px;flex-shrink:0;margin-top:2px}
+.badge-concept{color:#4fa8ff;background:rgba(79,168,255,.1)}.badge-code{color:#00d9a0;background:rgba(0,217,160,.1)}
+.badge-quiz{color:#ffc850;background:rgba(255,200,80,.1)}.badge-project{color:#c084fc;background:rgba(192,132,252,.1)}
+.task-xp{font-family:var(--mono);font-size:8px;color:var(--amber);flex-shrink:0;margin-top:2px;opacity:.7}
+.conf-row{display:flex;align-items:center;gap:3px;margin-top:2px}.conf-label{font-family:var(--mono);font-size:8px;color:var(--muted)}
+.conf-star{cursor:pointer;font-size:11px;opacity:.28;transition:opacity .15s;color:var(--amber)}.conf-star.on{opacity:1}
+.bulk-actions{display:flex;gap:5px;margin-bottom:7px;flex-wrap:wrap}
+.bulk-btn{background:var(--s2);border:1px solid var(--border);color:var(--sub);font-family:var(--mono);font-size:9px;padding:3px 9px;border-radius:5px;cursor:pointer;transition:all .2s}
+.bulk-btn:hover{color:var(--text);border-color:var(--muted)}
+.notes-widget{margin-top:7px;padding:9px 11px;background:var(--s2);border-radius:var(--r8)}
+.notes-label{font-family:var(--mono);font-size:9px;color:var(--sub);margin-bottom:4px}
+.notes-ta{width:100%;background:none;border:none;outline:none;resize:none;font-family:var(--body);font-size:12px;color:var(--text);line-height:1.6;min-height:46px}
+.notes-ta::placeholder{color:var(--muted)}
+.notes-save{font-family:var(--mono);font-size:9px;color:var(--green);background:none;border:1px solid rgba(0,217,160,.35);padding:2px 8px;border-radius:4px;cursor:pointer;margin-top:4px}
+.ai-brief-wrap{margin-top:8px;background:linear-gradient(135deg,rgba(120,100,255,.04),rgba(0,217,160,.04));border:1px solid rgba(120,100,255,.18);border-radius:var(--r12);overflow:hidden}
+.ai-brief-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid rgba(120,100,255,.12)}
+.ai-brief-title{font-family:var(--mono);font-size:10px;color:#a78bfa}
+.ai-brief-btns{display:flex;gap:5px}
+.ai-btn{font-family:var(--mono);font-size:9px;padding:3px 9px;border-radius:4px;cursor:pointer;border:1px solid;transition:all .2s}
+.ai-btn-brief{color:#a78bfa;border-color:rgba(167,139,250,.35);background:rgba(167,139,250,.05)}.ai-btn-brief:hover{background:rgba(167,139,250,.1)}
+.ai-btn-quiz{color:var(--amber);border-color:rgba(255,200,80,.35);background:rgba(255,200,80,.05)}.ai-btn-quiz:hover{background:rgba(255,200,80,.1)}
+.ai-brief-body{padding:12px;font-size:12px;line-height:1.7;color:var(--sub)}
+.ai-spinner{width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* LAB TERMINAL */
+.lab-day-btn{background:var(--s1);border:1px solid var(--border);color:var(--sub);font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:var(--r8);cursor:pointer;transition:all .2s}
+.lab-day-btn:hover{color:var(--text);border-color:var(--muted)}.lab-day-done{color:var(--green)!important;border-color:rgba(0,217,160,.4)!important}
+
+/* KANBAN */
+.kanban-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+@media(max-width:700px){.kanban-grid{grid-template-columns:repeat(2,1fr)}}
+.k-col{background:var(--s1);border:1px solid var(--border);border-radius:var(--r12);overflow:hidden}
+.k-col-hdr{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.k-col-title{font-size:12px;font-weight:600}.k-count{font-family:var(--mono);font-size:9px;color:var(--sub);background:var(--s2);padding:2px 6px;border-radius:7px}
+.k-body{padding:8px;display:flex;flex-direction:column;gap:5px;max-height:480px;overflow-y:auto}
+.k-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r8);padding:8px 10px;border-left:3px solid var(--kc,var(--muted));cursor:pointer;transition:background .2s}
+.k-card:hover{background:var(--s3)}.k-card-day{font-family:var(--mono);font-size:9px;color:var(--sub)}
+.k-card-label{font-size:11.5px;font-weight:600;margin-top:2px;line-height:1.35}.k-card-pct{font-family:var(--mono);font-size:9px;color:var(--sub);margin-top:3px}
+.k-empty{color:var(--muted);font-size:12px;text-align:center;padding:16px 0}
+
+/* FOCUS */
+.focus-nav{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
+.focus-nav select{background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--body);font-size:12px;padding:6px 10px;border-radius:var(--r8);outline:none;flex:1;min-width:160px}
+.focus-btn{background:var(--s2);border:1px solid var(--border);color:var(--sub);font-family:var(--mono);font-size:10px;padding:6px 11px;border-radius:var(--r8);cursor:pointer;transition:all .2s;white-space:nowrap}
+.focus-btn:hover{color:var(--text);border-color:var(--muted)}.focus-btn.primary{color:var(--green);border-color:rgba(0,217,160,.35);background:rgba(0,217,160,.05)}
+.focus-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r16);padding:16px}
+.focus-day-tag{font-family:var(--mono);font-size:10px;color:var(--green);margin-bottom:4px}
+.focus-title{font-size:17px;font-weight:700;margin-bottom:3px}.focus-meta{font-size:12px;color:var(--sub);margin-bottom:12px}
+.focus-pct-bar{height:3px;background:var(--s3);border-radius:2px;margin-bottom:14px}.focus-pct-fill{height:100%;border-radius:2px;background:var(--green);transition:width .4s}
+.focus-link{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:var(--blue);text-decoration:none;padding:4px 9px;border:1px solid rgba(79,168,255,.28);border-radius:var(--r8);margin-bottom:12px;transition:all .2s}
+.focus-link:hover{background:rgba(79,168,255,.07)}
+
+/* JOBS */
+.job-kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+@media(max-width:700px){.job-kanban{grid-template-columns:repeat(2,1fr)}}
+.job-col{background:var(--s1);border:1px solid var(--border);border-radius:var(--r12);overflow:hidden}
+.job-col-hdr{padding:9px 12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;font-size:11.5px;font-weight:600}
+.job-body{padding:7px;min-height:60px}.job-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r8);padding:8px 10px;margin-bottom:5px}
+.job-card-company{font-weight:700;font-size:12.5px}.job-card-role{font-size:11px;color:var(--sub);margin-top:1px}
+.job-card-meta{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:4px}
+.job-card-actions{display:flex;gap:3px;margin-top:6px;flex-wrap:wrap}
+.job-action-btn{font-family:var(--mono);font-size:8.5px;padding:2px 6px;border-radius:3px;cursor:pointer;border:1px solid var(--border);background:var(--s3);color:var(--sub);transition:all .2s}
+.job-action-btn:hover{color:var(--text);border-color:var(--muted)}.job-del{color:var(--red)!important;border-color:rgba(255,95,95,.2)!important}
+.job-add-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;align-items:flex-end}
+.job-input{background:var(--s1);border:1px solid var(--border);color:var(--text);font-family:var(--body);font-size:12px;padding:7px 10px;border-radius:var(--r8);outline:none;flex:1;min-width:110px}
+.job-input:focus{border-color:var(--muted)}
+.job-source-select{background:var(--s1);border:1px solid var(--border);color:var(--text);font-family:var(--body);font-size:12px;padding:7px 10px;border-radius:var(--r8);outline:none}
+.job-save-btn{background:rgba(0,217,160,.09);border:1px solid rgba(0,217,160,.35);color:var(--green);font-family:var(--mono);font-size:10px;padding:7px 13px;border-radius:var(--r8);cursor:pointer;white-space:nowrap}
+
+/* SR */
+.sr-item{background:var(--s2);border:1px solid var(--border);border-radius:var(--r8);padding:9px 11px;margin-bottom:6px;display:flex;align-items:flex-start;gap:9px}
+.sr-item-text{flex:1;font-size:12.5px;line-height:1.5}.sr-item-meta{font-family:var(--mono);font-size:9px;color:var(--sub);margin-top:2px}
+.sr-rate-row{display:flex;gap:3px;margin-top:6px}.sr-rate-btn{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;cursor:pointer;border:1px solid;transition:all .2s}
+
+/* QBANK */
+.qbank-filters{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+.qb-chip{background:var(--s2);border:1px solid var(--border);color:var(--sub);font-size:10px;font-family:var(--mono);padding:3px 8px;border-radius:20px;cursor:pointer;transition:all .2s}
+.qb-chip.active{background:var(--s3);color:var(--text);border-color:var(--muted)}
+.q-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r12);padding:13px 14px;margin-bottom:7px;cursor:pointer;transition:border-color .2s}
+.q-card:hover{border-color:var(--muted)}.q-card.done-q{opacity:.6}
+.q-card-top{display:flex;align-items:flex-start;gap:9px}
+.q-check{width:15px;height:15px;border-radius:3px;border:1.5px solid var(--border);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;background:var(--bg);transition:all .2s}
+.q-check.on{background:var(--green);border-color:var(--green)}.q-check.on::after{content:'✓';font-size:9px;color:#000;font-weight:700}
+.q-question{font-size:13px;font-weight:600;flex:1;line-height:1.5}
+.q-meta{display:flex;gap:5px;margin-top:5px;margin-left:24px}
+.q-cat{font-family:var(--mono);font-size:9px;padding:2px 5px;border-radius:3px;background:var(--s2);color:var(--sub)}
+.q-diff-easy{color:var(--green);background:rgba(0,217,160,.08)}.q-diff-med{color:var(--amber);background:rgba(255,200,80,.08)}.q-diff-hard{color:var(--red);background:rgba(255,95,95,.08)}
+.q-answer-wrap{overflow:hidden;display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s}.q-answer-wrap.open{grid-template-rows:1fr}
+.q-answer{overflow:hidden;padding:0 0 0 24px}.q-answer-inner{padding-top:8px;font-size:12.5px;color:var(--sub);line-height:1.7;border-top:1px solid var(--s3);margin-top:7px}
+
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-bottom:14px}
+@media(max-width:500px){.stat-grid{grid-template-columns:1fr}}
+.stat-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r12);padding:14px 15px}
+.stat-card-title{font-family:var(--mono);font-size:9px;color:var(--sub);margin-bottom:9px;text-transform:uppercase;letter-spacing:.08em}
+.type-row{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.type-label{font-family:var(--mono);font-size:10px;width:54px;flex-shrink:0}
+.type-bar-track{flex:1;height:5px;background:var(--s3);border-radius:3px;overflow:hidden}
+.type-bar-fill{height:100%;border-radius:3px;transition:width .5s}
+.type-count{font-family:var(--mono);font-size:9px;color:var(--sub);width:42px;text-align:right;flex-shrink:0}
+.heatmap-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.heat-cell{aspect-ratio:1;border-radius:2px;background:var(--s3)}
+.heat-cell.h1{background:rgba(0,217,160,.18)}.heat-cell.h2{background:rgba(0,217,160,.4)}.heat-cell.h3{background:rgba(0,217,160,.62)}.heat-cell.h4{background:rgba(0,217,160,.85)}
+.heat-day-lbl{font-family:var(--mono);font-size:8px;color:var(--sub);text-align:center;padding:1px 0}
+
+/* GH */
+.gh-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r12);padding:16px}
+.gh-input-wrap{display:flex;gap:7px;margin-bottom:14px}
+.gh-input{flex:1;background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--body);font-size:12px;padding:7px 11px;border-radius:var(--r8);outline:none}
+.gh-input:focus{border-color:var(--muted)}.gh-fetch-btn{background:rgba(0,217,160,.09);border:1px solid rgba(0,217,160,.35);color:var(--green);font-family:var(--mono);font-size:10px;padding:7px 13px;border-radius:var(--r8);cursor:pointer}
+.gh-profile{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.gh-avatar{width:44px;height:44px;border-radius:50%;border:2px solid var(--border)}
+.gh-name{font-weight:700;font-size:14px}.gh-handle{font-family:var(--mono);font-size:11px;color:var(--sub)}
+.gh-contrib-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-top:8px}
+.gh-cell{aspect-ratio:1;border-radius:1px;background:var(--s3)}
+.gh-cell.gc1{background:rgba(0,217,160,.18)}.gh-cell.gc2{background:rgba(0,217,160,.4)}.gh-cell.gc3{background:rgba(0,217,160,.62)}.gh-cell.gc4{background:var(--green)}
+
+/* REPORT */
+.report-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r12);padding:16px;margin-bottom:11px}
+.report-week-nav{display:flex;align-items:center;gap:11px;margin-bottom:12px;justify-content:center}
+.report-week-btn{background:var(--s2);border:1px solid var(--border);color:var(--text);padding:4px 11px;border-radius:var(--r8);cursor:pointer}
+.report-week-label{font-weight:600;font-size:13px;min-width:140px;text-align:center}
+.report-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+@media(max-width:500px){.report-grid{grid-template-columns:repeat(2,1fr)}}
+.report-stat{text-align:center}.report-stat-num{font-size:21px;font-weight:700;font-family:var(--mono)}.report-stat-lbl{font-size:9px;color:var(--sub);font-family:var(--mono)}
+.report-section-title{font-family:var(--mono);font-size:9px;color:var(--sub);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+.day-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.day-bar-name{font-family:var(--mono);font-size:9px;color:var(--sub);width:28px}
+.day-bar-track{flex:1;height:7px;background:var(--s3);border-radius:4px;overflow:hidden}
+.day-bar-fill{height:100%;background:var(--green);border-radius:4px;transition:width .4s}
+.day-bar-count{font-family:var(--mono);font-size:9px;color:var(--sub);width:50px;text-align:right}
+.report-export-btn{background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:10px;padding:6px 13px;border-radius:var(--r8);cursor:pointer;transition:all .2s;margin-top:10px}
+.report-export-btn:hover{border-color:var(--muted);color:var(--green)}
+.eta-band{background:var(--s2);border:1px solid var(--border);border-radius:var(--r8);padding:9px 12px;margin-top:8px}
+.eta-band-title{font-family:var(--mono);font-size:9px;color:var(--sub);margin-bottom:4px}
+
+/* POMODORO */
+.modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);align-items:center;justify-content:center}
+.modal.open{display:flex}.modal-box{background:var(--s1);border:1px solid var(--border);border-radius:var(--r20);padding:20px;width:min(330px,94vw);position:relative}
+.modal-close{position:absolute;top:12px;right:12px;background:none;border:none;cursor:pointer;color:var(--sub);font-size:14px}
+.modal-title{font-size:14px;font-weight:700;text-align:center;margin-bottom:14px}
+.pomo-mode-row{display:flex;gap:4px;margin-bottom:14px}
+.pomo-mode-btn{flex:1;background:var(--s2);border:1px solid var(--border);color:var(--sub);font-family:var(--mono);font-size:10px;padding:5px 2px;border-radius:var(--r8);cursor:pointer;transition:all .2s}
+.pomo-mode-btn.active{background:rgba(0,217,160,.09);border-color:var(--green);color:var(--green)}
+.pomo-ring{position:relative;margin:0 auto 12px;width:150px;height:150px;display:flex;align-items:center;justify-content:center}
+.pomo-svg{position:absolute;inset:0;transform:rotate(-90deg)}.pomo-track{fill:none;stroke:var(--s3);stroke-width:8}
+.pomo-prog{fill:none;stroke:var(--green);stroke-width:8;stroke-linecap:round;stroke-dasharray:440;stroke-dashoffset:0;transition:stroke-dashoffset .5s linear}
+.pomo-time{text-align:center;z-index:1}.pomo-time-num{font-family:var(--mono);font-size:30px;font-weight:700}
+.pomo-time-lbl{font-family:var(--mono);font-size:9px;color:var(--sub);margin-top:1px}
+.pomo-controls{display:flex;justify-content:center;gap:9px;margin-bottom:9px}
+.pomo-ctrl-btn{border:none;border-radius:50%;cursor:pointer;transition:all .2s}
+.pomo-ctrl-btn.reset{width:36px;height:36px;background:var(--s2);color:var(--sub);font-size:14px}
+.pomo-ctrl-btn.main{width:48px;height:48px;background:var(--green);color:#000;font-size:18px}
+.pomo-ctrl-btn.main:hover{transform:scale(1.06)}.pomo-sessions{font-family:var(--mono);font-size:10px;color:var(--sub);text-align:center}
+
+/* CONFETTI */
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:300;overflow:hidden}
+.confetto{position:absolute;width:8px;height:8px;border-radius:2px;animation:fall 3s ease-out forwards}
+@keyframes fall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.kbd-hint{font-family:var(--mono);font-size:9px;color:var(--muted);background:var(--s3);border:1px solid var(--border);padding:1px 4px;border-radius:3px}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-brand"><span class="g">DEV</span><span class="p">OPS</span><span class="v">v3</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-view="roadmap">☑ Roadmap</button>
+    <button class="nav-tab new-badge" data-view="labs">⌨ Labs</button>
+    <button class="nav-tab new-badge" data-view="certs">🏆 Certs</button>
+    <button class="nav-tab" data-view="kanban">⊞ Kanban</button>
+    <button class="nav-tab" data-view="focus">◎ Focus</button>
+    <button class="nav-tab" data-view="reviews">🔁 Reviews</button>
+    <button class="nav-tab" data-view="jobs">💼 Jobs</button>
+    <button class="nav-tab" data-view="qbank">❓ Q-Bank</button>
+    <button class="nav-tab" data-view="stats">◈ Stats</button>
+    <button class="nav-tab" data-view="github">🐙 GitHub</button>
+    <button class="nav-tab" data-view="weekly">🎯 Goals</button>
+    <button class="nav-tab" data-view="report">📊 Report</button>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn hi" id="pomo-nav-btn">⏱ Timer</button>
+    <button class="nav-btn" id="theme-btn">◑ Light</button>
+  </div>
+</nav>
+
+<div id="bottom-bar">
+  <button class="btab active" data-view="roadmap"><span class="bico">☑</span>Map</button>
+  <button class="btab" data-view="labs"><span class="bico">⌨</span>Labs</button>
+  <button class="btab" data-view="certs"><span class="bico">🏆</span>Certs</button>
+  <button class="btab" data-view="focus"><span class="bico">◎</span>Focus</button>
+  <button class="btab" data-view="reviews"><span class="bico">🔁</span>Review</button>
+  <button class="btab" data-view="jobs"><span class="bico">💼</span>Jobs</button>
+  <button class="btab" data-view="qbank"><span class="bico">❓</span>Q-Bank</button>
+  <button class="btab" data-view="weekly"><span class="bico">🎯</span>Goals</button>
+</div>
+
+<!-- POMODORO -->
+<div class="modal" id="pomo-modal">
+  <div class="modal-box">
+    <button class="modal-close" id="pomo-close">✕</button>
+    <div class="modal-title">⏱ Focus Timer</div>
+    <div class="pomo-mode-row">
+      <button class="pomo-mode-btn active" data-mode="focus">25m Focus</button>
+      <button class="pomo-mode-btn" data-mode="short">5m Break</button>
+      <button class="pomo-mode-btn" data-mode="long">15m Break</button>
+    </div>
+    <div class="pomo-ring">
+      <svg class="pomo-svg" width="150" height="150" viewBox="0 0 170 170">
+        <circle class="pomo-track" cx="85" cy="85" r="70"/>
+        <circle class="pomo-prog" id="pomo-prog" cx="85" cy="85" r="70"/>
+      </svg>
+      <div class="pomo-time"><div class="pomo-time-num" id="pomo-num">25:00</div><div class="pomo-time-lbl" id="pomo-lbl">FOCUS</div></div>
+    </div>
+    <div class="pomo-controls">
+      <button class="pomo-ctrl-btn reset" id="pomo-reset">↺</button>
+      <button class="pomo-ctrl-btn main" id="pomo-play">▶</button>
+    </div>
+    <div class="pomo-sessions" id="pomo-sessions">Sessions: 0 · 0.0 hrs</div>
+  </div>
+</div>
+
+<!-- ROADMAP -->
+<div id="view-roadmap" class="view active">
+  <div class="wrap">
+    <div style="margin-bottom:16px">
+      <div class="eyebrow">GK's path to a DevOps job · 90 Days</div>
+      <h1 class="page-title">DevOps Roadmap <span style="color:var(--amber);font-size:16px">v3</span></h1>
+      <p class="page-sub">Labs · Certs · AI Briefs · Spaced Repetition · Job Tracker · Weekly Goals</p>
+    </div>
+    <div class="xp-bar-wrap">
+      <div class="xp-level-badge" id="xp-level-badge" style="color:var(--green);border-color:var(--green)">Apprentice</div>
+      <div class="xp-info">
+        <div class="xp-label-row"><span id="xp-level-name">Level 1</span><span id="xp-next-label">200 XP to next</span></div>
+        <div class="xp-track"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+      </div>
+      <div class="xp-total" id="xp-total" style="color:var(--amber)">0 XP</div>
+    </div>
+    <div class="week-goal-mini" onclick="switchView('weekly')">
+      <div class="wgm-row"><span class="wgm-label">📅 WEEKLY GOAL</span><span class="wgm-nums" id="wgm-nums">0 / 35</span></div>
+      <div class="wgm-track"><div class="wgm-fill" id="wgm-fill" style="width:0%"></div></div>
+    </div>
+    <div class="stats-row">
+      <div class="sc"><div class="sc-num" data-stat="done">0</div><div class="sc-lbl">Done</div></div>
+      <div class="sc"><div class="sc-num" style="color:var(--red)" data-stat="left">0</div><div class="sc-lbl">Left</div></div>
+      <div class="sc"><div class="sc-num" data-stat="total">0</div><div class="sc-lbl">Total</div></div>
+      <div class="sc"><div class="sc-num" style="background:linear-gradient(135deg,#7864ff,#00d9a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-stat="pct">0%</div><div class="sc-lbl">Progress</div></div>
+      <div class="sc"><div class="sc-num" style="color:var(--amber)" data-stat="streak">0</div><div class="sc-lbl">🔥 Streak</div></div>
+      <div class="sc"><div class="sc-num" style="color:var(--teal)" data-stat="hours">0h</div><div class="sc-lbl">⏱ Studied</div></div>
+    </div>
+    <div class="prog-row"><span>OVERALL PROGRESS</span><span data-stat="prog-lbl">0%</span></div>
+    <div class="prog-track"><div class="prog-fill" id="main-prog-fill" style="width:0%"></div></div>
+    <div class="smart-next-card" id="smart-next-card">
+      <span style="font-size:20px">🎯</span>
+      <div style="flex:1"><div style="font-family:var(--mono);font-size:9px;color:var(--green);text-transform:uppercase;letter-spacing:.1em">Recommended next</div><div style="font-size:13.5px;font-weight:600;margin-top:2px" id="smart-next-title">Loading…</div><div style="font-size:11px;color:var(--sub);margin-top:2px" id="smart-next-meta"></div></div>
+      <span style="color:var(--green);font-size:16px;flex-shrink:0">→</span>
+    </div>
+    <div class="banner"><span>🕐</span><span id="left-msg">Loading…</span><span id="sr-due-badge" style="display:none;cursor:pointer;color:var(--amber);font-family:var(--mono);font-size:10px;padding:3px 9px;border:1px solid rgba(255,200,80,.3);border-radius:6px" onclick="switchView('reviews')">🔁 <span id="sr-due-count">0</span> reviews due</span></div>
+    <div class="search-wrap" style="margin-bottom:6px">
+      <span style="color:var(--muted);font-size:13px">🔍</span>
+      <input type="text" id="search-input" placeholder="Search… (press / to focus)"/>
+      <span class="kbd-hint">/</span>
+      <button id="search-clear" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:12px">✕</button>
+    </div>
+    <div class="sf-wrap">
+      <button class="sf-chip f-type-concept" data-val="concept">concept</button>
+      <button class="sf-chip f-type-code" data-val="code">code</button>
+      <button class="sf-chip f-type-quiz" data-val="quiz">quiz</button>
+      <button class="sf-chip f-type-project" data-val="project">project</button>
+      <button class="sf-chip f-status" data-val="incomplete" style="color:var(--amber)">incomplete</button>
+      <button class="sf-chip f-status" data-val="done" style="color:var(--green)">done only</button>
+    </div>
+    <div class="filter-bar" id="filter-bar"><button class="fpill active" data-phase="all">All Phases</button></div>
+    <div id="roadmap-wrap"></div>
+  </div>
+</div>
+
+<!-- LABS -->
+<div id="view-labs" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:18px">
+      <div class="eyebrow">Hands-on practice</div>
+      <h2 class="page-title">Interactive Labs</h2>
+      <p class="page-sub">Real commands. Simulated terminal. Auto-graded exercises. No setup needed.</p>
+    </div>
+    <div style="background:rgba(255,200,80,.06);border:1px solid rgba(255,200,80,.25);border-radius:var(--r12);padding:12px 14px;margin-bottom:18px;font-size:13px;color:var(--sub);line-height:1.7">
+      <strong style="color:var(--amber)">How it works:</strong> Type commands in the terminal below. The checker auto-ticks exercises when your command output matches the expected result. For Docker/K8s days, open KillerCoda or Play with Docker in a new tab — paste the commands there and enter them here to auto-verify.
+    </div>
+    <div id="labs-content"></div>
+  </div>
+</div>
+
+<!-- CERTS -->
+<div id="view-certs" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:18px">
+      <div class="eyebrow">Certification readiness</div>
+      <h2 class="page-title">Cert Tracker</h2>
+      <p class="page-sub">CKA · Terraform Associate · AWS SAA — mapped to your roadmap progress.</p>
+    </div>
+    <div id="certs-content"></div>
+  </div>
+</div>
+
+<!-- KANBAN -->
+<div id="view-kanban" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:16px"><div class="eyebrow">Workflow view</div><h2 class="page-title">Kanban Board</h2><p class="page-sub">All 91 days across pipeline stages. Click to jump to Focus.</p></div>
+    <div class="filter-bar" id="kb-filter-bar"><button class="fpill active" data-phase="all">All Phases</button></div>
+    <div class="kanban-grid" id="kanban-wrap"></div>
+  </div>
+</div>
+
+<!-- FOCUS -->
+<div id="view-focus" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:16px"><div class="eyebrow">One day at a time</div><h2 class="page-title">Daily Focus</h2><p class="page-sub">J/K to navigate · P for timer · / to search</p></div>
+    <div class="focus-nav">
+      <select id="focus-day-sel"></select>
+      <button class="focus-btn" id="focus-prev">← <span class="kbd-hint">K</span></button>
+      <button class="focus-btn" id="focus-next">→ <span class="kbd-hint">J</span></button>
+      <button class="focus-btn primary" id="focus-today">📍 Next Incomplete</button>
+    </div>
+    <div id="focus-content"></div>
+  </div>
+</div>
+
+<!-- REVIEWS -->
+<div id="view-reviews" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:16px"><div class="eyebrow">Spaced repetition</div><h2 class="page-title">Due Reviews</h2><p class="page-sub">Low-confidence tasks resurface at 3/7/14/30 day intervals.</p></div>
+    <div id="reviews-content"></div>
+  </div>
+</div>
+
+<!-- JOBS -->
+<div id="view-jobs" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:16px"><div class="eyebrow">The finish line</div><h2 class="page-title">Job Tracker</h2><p class="page-sub">Applied → Phone → Technical → Offer</p></div>
+    <div class="job-add-row">
+      <input class="job-input" id="jt-company" placeholder="Company *" style="max-width:140px"/>
+      <input class="job-input" id="jt-role" placeholder="Role *" style="max-width:160px"/>
+      <select class="job-source-select" id="jt-source"><option>LinkedIn</option><option>Naukri</option><option>Wellfound</option><option>Company site</option><option>Referral</option><option>Other</option></select>
+      <input class="job-input" id="jt-notes" placeholder="Notes (salary, stack…)" style="flex:2"/>
+      <button class="job-save-btn" id="jt-save">+ Add</button>
+    </div>
+    <div class="stats-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px" id="job-stats-row"></div>
+    <div class="job-kanban" id="jobs-wrap"></div>
+  </div>
+</div>
+
+<!-- QBANK -->
+<div id="view-qbank" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:16px"><div class="eyebrow">Interview prep</div><h2 class="page-title">Question Bank</h2><p class="page-sub">34 real interview questions · K8s · GitOps · IaC · Security · CI/CD</p></div>
+    <input type="text" id="qbank-search" placeholder="Search questions…" style="width:100%;background:var(--s1);border:1px solid var(--border);color:var(--text);font-family:var(--body);font-size:12px;padding:8px 12px;border-radius:var(--r8);outline:none;margin-bottom:9px"/>
+    <div class="qbank-filters" id="qbank-filters">
+      <button class="qb-chip active" data-cat="all">All</button>
+      <button class="qb-chip" data-cat="k8s">Kubernetes</button>
+      <button class="qb-chip" data-cat="gitops">GitOps</button>
+      <button class="qb-chip" data-cat="iac">IaC</button>
+      <button class="qb-chip" data-cat="security">Security</button>
+      <button class="qb-chip" data-cat="cicd">CI/CD</button>
+      <button class="qb-chip" data-cat="obs">Observability</button>
+      <button class="qb-chip" data-cat="platform">Platform</button>
+      <span style="width:1px;background:var(--border);margin:0 3px;align-self:stretch"></span>
+      <button class="qb-chip" data-diff="easy" style="color:var(--green)">Easy</button>
+      <button class="qb-chip" data-diff="med" style="color:var(--amber)">Med</button>
+      <button class="qb-chip" data-diff="hard" style="color:var(--red)">Hard</button>
+    </div>
+    <div id="qbank-count" style="font-family:var(--mono);font-size:10px;color:var(--sub);margin-bottom:10px"></div>
+    <div id="qbank-wrap"></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div id="view-stats" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:16px"><div class="eyebrow">Your metrics</div><h2 class="page-title">Progress Stats</h2><p class="page-sub">Readiness score · XP · Cert coverage · Heatmap</p></div>
+    <div id="stats-content"></div>
+  </div>
+</div>
+
+<!-- GITHUB -->
+<div id="view-github" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:16px"><div class="eyebrow">Accountability</div><h2 class="page-title">GitHub Tracker</h2><p class="page-sub">Push every day. Recruiters look at the green graph.</p></div>
+    <div class="gh-card">
+      <div class="gh-input-wrap">
+        <input type="text" id="gh-username-input" class="gh-input" placeholder="Your GitHub username…"/>
+        <button class="gh-fetch-btn" id="gh-fetch-btn">Load Profile</button>
+      </div>
+      <div id="gh-card-content"><div style="color:var(--sub);font-size:13px;text-align:center;padding:20px 0">Enter your GitHub username to see your contribution graph.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- WEEKLY GOALS -->
+<div id="view-weekly" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:16px"><div class="eyebrow">Replaced streak freeze</div><h2 class="page-title">Weekly Goals</h2><p class="page-sub">Miss a day — still win the week. Come back after a gap — earn 2× XP.</p></div>
+    <div id="weekly-content"></div>
+  </div>
+</div>
+
+<!-- REPORT -->
+<div id="view-report" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:16px"><div class="eyebrow">Weekly retrospective</div><h2 class="page-title">Weekly Report</h2><p class="page-sub">ETA band · Week-by-week · Export</p></div>
+    <div class="report-card">
+      <div class="report-week-nav">
+        <button class="report-week-btn" id="report-prev">←</button>
+        <span class="report-week-label" id="report-week-label">This week</span>
+        <button class="report-week-btn" id="report-next">→</button>
+      </div>
+      <div class="report-grid">
+        <div class="report-stat"><div class="report-stat-num" style="color:var(--green)" id="rw-tasks">0</div><div class="report-stat-lbl">Tasks this week</div></div>
+        <div class="report-stat"><div class="report-stat-num" style="color:var(--blue)" id="rw-days">0/7</div><div class="report-stat-lbl">Active days</div></div>
+        <div class="report-stat"><div class="report-stat-num" style="color:var(--amber)" id="rw-hrs">0h</div><div class="report-stat-lbl">Pomo hrs</div></div>
+        <div class="report-stat"><div class="report-stat-num" style="color:var(--purple)" id="rw-ready">0%</div><div class="report-stat-lbl">Readiness</div></div>
+      </div>
+      <div class="report-section-title">Day by day</div>
+      <div id="report-day-bars"></div>
+      <div class="eta-band" id="eta-band" style="display:none"><div class="eta-band-title">📅 ETA CONFIDENCE BAND</div><div id="eta-band-content" style="font-size:12px;color:var(--sub)"></div></div>
+      <button class="report-export-btn" id="report-export">↓ Export report</button>
+    </div>
+    <div class="report-card">
+      <div class="report-section-title" style="margin-bottom:10px">Overall</div>
+      <div class="stats-row" style="grid-template-columns:repeat(3,1fr)">
+        <div class="sc"><div class="sc-num" data-stat="done">0</div><div class="sc-lbl">Tasks Done</div></div>
+        <div class="sc"><div class="sc-num" data-stat="streak">0</div><div class="sc-lbl">🔥 Streak</div></div>
+        <div class="sc"><div class="sc-num" data-stat="hours">0h</div><div class="sc-lbl">⏱ Pomo hrs</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/state.js"></script>
+<script src="js/labs.js"></script>
+<script src="js/qbank.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/app.js"></script>
+<script src="js/app_v3_additions.js"></script>
+</body>
+</html>
